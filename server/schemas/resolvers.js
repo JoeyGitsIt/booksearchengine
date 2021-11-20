@@ -41,10 +41,10 @@ const resolvers = {
         const book = await Book.create({
           ...args,
         });
-
+        const saveBookCount = book.savedBooks.length();
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: book.bookId } }
+          { $addToSet: { savedBooks: book.bookId, bookCount: saveBookCount } }
         );
 
         return User;
