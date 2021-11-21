@@ -6,7 +6,9 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id });
+        return await User.findOne({ _id: context?.user?._id }).populate(
+          "savedBooks"
+        );
       }
       throw new AuthenticationError("Check you are logged in");
     },
@@ -36,33 +38,32 @@ const resolvers = {
       return { token, user };
     },
     // what all is getting passed into args?
-    saveBook: async (parent, args, context) => {
+    saveBook: async (parent, { args }, context) => {
       if (context.user) {
-        const book = await Book.create({
-          ...args,
-        });
-        const saveBookCount = book.savedBooks.length();
-        await User.findOneAndUpdate(
+        // const book = await Book.create({
+        //   ...args,
+        // });
+        // const saveBookCount = book.savedBooks.length();
+        const book = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: book.bookId, bookCount: saveBookCount } }
+          { $addToSet: { savedBooks: args } }
         );
 
-        return User;
+        return book;
       }
       throw new AuthenticationError("You are not logged in!");
     },
-    removeBook: async (parent, args, context) => {
+    removeBook: async (parent, { args }, context) => {
       if (context.user) {
-        const book = await Book.findOneAndDelete({
-          bookId: args.bookId,
-        });
-
-        await User.findOneAndUpdate(
+        // = await Book.findOneAndDelete({
+        //   bookId: args.bookId,
+        // });
+        const book = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: book.bookId } }
+          { $pull: { savedBooks: { bookId: args } } }
         );
 
-        return User;
+        return book;
       }
       throw new AuthenticationError("You are not logged in!");
     },
