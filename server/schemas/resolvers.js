@@ -38,7 +38,7 @@ const resolvers = {
       return { token, user };
     },
     // what all is getting passed into args?
-    saveBook: async (parent, { args }, context) => {
+    saveBook: async (parent, { input }, context) => {
       if (context.user) {
         // const book = await Book.create({
         //   ...args,
@@ -53,7 +53,7 @@ const resolvers = {
       }
       throw new AuthenticationError("You are not logged in!");
     },
-    removeBook: async (parent, { args }, context) => {
+    removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         // = await Book.findOneAndDelete({
         //   bookId: args.bookId,
