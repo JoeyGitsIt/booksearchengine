@@ -10,13 +10,13 @@ import {
 } from "react-bootstrap";
 
 import Auth from "../utils/auth";
-import { saveBook, searchGoogleBooks } from "../utils/API";
+import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 import { SAVE_BOOK } from "../utils/mutations";
 
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+// import { useParams } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -80,9 +80,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await createBook({
-        variables: { bookToSave, token },
-      });
+      const response = await createBook(bookToSave, token);
       // saveBook(bookToSave, token);
 
       if (!response.ok) {
