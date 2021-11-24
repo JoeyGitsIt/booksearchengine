@@ -10,7 +10,6 @@ const resolvers = {
           "-__v -password"
         );
 
-        // .populate("savedBooks");
         return thing;
       }
       throw new AuthenticationError("Check you are logged in");
@@ -43,10 +42,6 @@ const resolvers = {
     // what all is getting passed into args?
     saveBook: async (parent, { bookData }, context) => {
       if (context.user) {
-        // const book = await Book.create({
-        //   ...args,
-        // });
-        // const saveBookCount = book.savedBooks.length();
         const book = await User.findOneAndUpdate(
           { _id: context.user._id },
           // solution uses push
@@ -61,12 +56,9 @@ const resolvers = {
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        // = await Book.findOneAndDelete({
-        //   bookId: args.bookId,
-        // });
         const book = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: { bookId: bookId } } },
+          { $pull: { savedBooks: { bookId } } },
           // according to solution
           { new: true }
         );
