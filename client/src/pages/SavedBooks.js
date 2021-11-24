@@ -16,9 +16,9 @@ import { REMOVE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
-  const [deleteBook] = useMutation(REMOVE_BOOK);
+  const [removeBook] = useMutation(REMOVE_BOOK);
 
-  const displayMe = data?.me || [];
+  const displayMe = data?.me || {};
 
   // const [userData, setUserData] = useState({});
 
@@ -59,7 +59,7 @@ const SavedBooks = () => {
     }
 
     try {
-      const { data } = await deleteBook({ variables: { bookId } });
+      const { data } = await removeBook({ variables: { bookId } });
 
       // if (!response.ok) {
       //   throw new Error("something went wrong!");
